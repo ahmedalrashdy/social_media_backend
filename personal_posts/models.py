@@ -54,7 +54,7 @@ class PPostInteraction(TimeStampedModel):
     )
     class Meta:
         unique_together = ('user','post')
-      
+    
 
     def __str__(self):
         return f"{self.user.name} {self.get_type_display()}"
@@ -76,7 +76,7 @@ class PCommentInteraction(TimeStampedModel):
     )
     class Meta:
         unique_together = ('user','comment')
-       
+    
 
     def __str__(self):
         return f"{self.user.name} {self.get_type_display()}"

@@ -22,8 +22,10 @@ urlpatterns = [
     
     
     path('accounts/', include('accounts.urls')),
+    path('group/', include('groups.urls')),
     
-    
+    path('api/personal/', include('personal_posts.urls')),
+
     
     #api
     path('api/v1/auth/', include('accounts.api_urls')),

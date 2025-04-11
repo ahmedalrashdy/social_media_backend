@@ -329,7 +329,7 @@ class ResetPasswordView(AuthBaseView):
         if not User.objects.filter(email=email).exists():
             return Response({'error': 'البريد الإلكتروني غير مسجل'}, status=status.HTTP_404_NOT_FOUND)
         
-         # حساب وقت الانتظار المتبقي
+        # حساب وقت الانتظار المتبقي
         cooldown = OTPManager.get_resend_cooldown(email)
         print(cooldown)
         if cooldown > 0:
@@ -416,10 +416,32 @@ class LogoutView(APIView):
     def post(self, request):
         try:
             refresh_token = request.data.get("refresh_token",None)
-            print("refresh_token")
+            print(refresh_token)
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return   Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
 
+# class LogoutView(APIView):
+#     def post(self, request):
+#         try:
+#             # استلام refresh_token من الطلب
+#             refresh_token = request.data.get("refresh_token", None)
+#             print( not refresh_token)
+#             # التحقق من وجود refresh_token
+#             if not refresh_token:
+#                 return Response({'error': 'refresh_token is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+#             # طباعة refresh_token للغرض التصحيحي (يمكنك إزالته إذا لم يكن ضروريًا)
+#             print(f"refresh_token: {refresh_token}")
+
+#             # التحقق من token وإلغاء صلاحيته
+#             token = RefreshToken(refresh_token)
+#             token.blacklist()  # إضافة التوكن إلى القائمة السوداء
+
+#             # إرجاع استجابة ناجحة
+#             return Response({'message': 'Logged out successfully'}, status=status.HTTP_205_RESET_CONTENT)
+#         except Exception as e:
+#             # إرجاع رسالة خطأ إذا حدثت مشكلة
+#             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
