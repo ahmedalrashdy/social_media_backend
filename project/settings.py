@@ -49,12 +49,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'utils.apps.UtilsConfig',
     'accounts',
     'profiles',
     'channels',
     'personal_posts',
     'groups',
-    'utils',
+    
     
     #package
      'guardian',
@@ -100,9 +103,17 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': env('DB_NAME'),              
+        'USER': env('DB_USER'),              
+        'PASSWORD': env('DB_PASSWORD'),          
+        'HOST': env('DB_HOST'), 
+        'PORT': env('DB_PORT'),    
     }
 }
 
@@ -191,3 +202,26 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
     'AUTH_HEADER_TYPES': ('Bearer',), 
 }
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # أو رابط Redis الخاص بك
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # "PASSWORD": "your_redis_password", # إذا كان Redis محميًا بكلمة مرور
+            # "SOCKET_CONNECT_TIMEOUT": 5,  # مهلة الاتصال (بالثواني)
+            # "SOCKET_TIMEOUT": 5,         # مهلة القراءة/الكتابة (بالثواني)
+        }
+    }
+  
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_CACHE_ALIAS = "cache"
+
+# Celery Configuration Options
+# تأكد من أن عنوان URL صحيح بناءً على طريقة تثبيت Redis
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # /0 يشير إلى قاعدة البيانات 0 في Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0' # لتخزين نتائج المهام (اختياري لكن شائع)
+

@@ -65,7 +65,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    # الحقول الأساسية
     name = models.CharField(
         _("الاسم الكامل"),
         max_length=255,

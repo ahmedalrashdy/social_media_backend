@@ -15,6 +15,7 @@ class PersonalPost(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='personal_posts', on_delete=models.CASCADE)
     text = models.TextField()
+    
     def __str__(self):
         return f"Post by {self.author.name} ({self.id})"
 
@@ -39,7 +40,6 @@ class PersonalCommentReply(TimeStampedModel):
         return f"Reply by {self.author.name} to comment {self.comment.id}"
     
 class PPostInteraction(TimeStampedModel):
-
     class InteractionType(models.TextChoices):
         LIKE = 'LK', 'Like'
         DISLIKE = 'DL', 'Dislike'
